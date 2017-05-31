@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextArea layoutX="70.0" layoutY="64.0" prefHeight="224.0" prefWidth="296.0" />
+      <TextField layoutX="70.0" layoutY="308.0" prefHeight="57.0" prefWidth="206.0" />
+      <Button layoutX="306.0" layoutY="337.0" mnemonicParsing="false" text="submit" />
+      <TextArea layoutX="397.0" layoutY="61.0" prefHeight="302.0" prefWidth="175.0" />
+      <Label layoutX="437.0" layoutY="29.0" prefHeight="27.0" prefWidth="95.0" text="Online member" />
+      <Label layoutX="199.0" layoutY="34.0" text="Lobby" />
+   </children>
+</Pane>
