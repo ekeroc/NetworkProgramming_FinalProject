@@ -68,10 +68,13 @@ public class logController implements Initializable{
 //		}
 
 		
+//		+++++++++++++++++++++++++++++++   圈圈叉叉
+//		TicTacTT tacTT = new TicTacTT();
+//		tacTT.Start();
 		
-		TicTacTT tacTT = new TicTacTT();
-		tacTT.Start();
-		
+		//+++++++++++++++++++++++++++++   塗鴉牆
+		paintBB paintbb = new paintBB();
+		paintbb.Start();
 		
 		
 		
