@@ -4,8 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -15,11 +20,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.Group;
 import javafx.scene.Node;
 
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 //import TicTac.Cell;
@@ -73,9 +82,9 @@ public class logController implements Initializable{
 //		tacTT.Start();
 		
 		//+++++++++++++++++++++++++++++   塗鴉牆
-		paintBB paintbb = new paintBB();
-		paintbb.Start();
-		
+//		paintBB paintbb = new paintBB();
+//		paintbb.Start();
+//		
 		
 		
 //			Stage stage = new Stage();
@@ -100,6 +109,32 @@ public class logController implements Initializable{
 //			});
 //			thread.setDaemon(true);
 //			thread.start();
+		Alert alert = new Alert(Alert.AlertType.WARNING, "I Warn You!", ButtonType.OK, ButtonType.CANCEL);
+		DialogPane root = alert.getDialogPane();
+
+		Stage dialogStage = new Stage(StageStyle.UTILITY);
+
+		for (ButtonType buttonType : root.getButtonTypes()) {
+		    ButtonBase button = (ButtonBase) root.lookupButton(buttonType);
+		    button.setOnAction(evt -> {
+		        root.setUserData(buttonType);
+		        dialogStage.close();
+		    });
+		}
+
+		// replace old scene root with placeholder to allow using root in other Scene
+		root.getScene().setRoot(new Group());
+
+		root.setPadding(new Insets(10, 0, 10, 0));
+		Scene scene = new Scene(root);
+
+		dialogStage.setScene(scene);
+		dialogStage.initModality(Modality.APPLICATION_MODAL);
+		dialogStage.setAlwaysOnTop(true);
+		dialogStage.setResizable(false);
+		dialogStage.showAndWait();
+		Optional<ButtonType> result = Optional.ofNullable((ButtonType) root.getUserData());
+		System.out.println("result: "+result.orElse(null));
 		
 	}
 	

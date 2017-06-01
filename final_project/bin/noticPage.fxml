@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerNotic">
    <children>
       <Label id="notiLabel" fx:id="notiLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="12.0" layoutY="9.0" prefHeight="27.0" prefWidth="55.0" textFill="#e10909">
          <font>
             <Font size="12.0" />
          </font>
       </Label>
-      <TextField id="txNotic" fx:id="txNotic" layoutX="1.0" layoutY="3.0" prefHeight="30.0" prefWidth="78.0" />
+      <TextField id="txNotic" fx:id="txNotic" layoutY="3.0" prefHeight="30.0" prefWidth="78.0" />
    </children>
 </Pane>

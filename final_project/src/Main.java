@@ -1,4 +1,5 @@
 
+import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.Naming;
@@ -27,6 +28,7 @@ import javafx.util.Callback;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -42,11 +44,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Main extends Application {
+	public Stage		stageLogin;
 
 	public Stage		primaryStage;
 	public BorderPane	rootLayout;
@@ -66,8 +71,7 @@ public class Main extends Application {
 
 	@FXML
 	public TextField txOutput;
-	
-	
+
 	@Override
 	public void start(Stage primaryStage) throws RemoteException {
 		this.primaryStage = primaryStage;
@@ -75,7 +79,7 @@ public class Main extends Application {
 
 		initRootLayout();
 		showPersonOverview();
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		stageLogin.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(final WindowEvent arg0) {
 				try {
@@ -86,7 +90,6 @@ public class Main extends Application {
 				}
 			}
 		});
-		//primaryStage.close();
 	}
 
 	public void initRootLayout() {
@@ -108,11 +111,13 @@ public class Main extends Application {
 
 	/**
 	 * Shows the person overview inside the root layout.
+	 * 
+	 * @throws RemoteException
 	 */
-	public void showPersonOverview() {
+	public void showPersonOverview() throws RemoteException {
 		// Load person overview.
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(Main.class.getResource("FXML.fxml"));
+		loader.setLocation(Main.class.getResource("logPage.fxml"));
 		AnchorPane personOverview = null;
 		try {
 			personOverview = (AnchorPane) loader.load();
@@ -126,8 +131,10 @@ public class Main extends Application {
 
 		ControllerLogin controllerLogin = loader.getController();
 		controllerLogin.setMain(this);
+		client.setUi(this);
+
 		controllerLogin.setClient(client);
-		
+		stageLogin = controllerLogin.getStage();
 
 		System.out.println(this);
 
@@ -140,10 +147,41 @@ public class Main extends Application {
 	public void signIn(String name) throws RemoteException, SQLException {
 		result = o.singIn(client, name);
 		System.out.println(result);
+
+		primaryStage.hide();
+
+	}
+
+	public String register(String name) throws RemoteException, SQLException {
+		result = o.register(name);
+		System.out.println(result);
+
+		return result;
 	}
 
 	public void sendToAll(String message) throws RemoteException {
 		o.sentToAll(client.getName(), message);
+	}
+
+	public void sendToClient(String name, String message) throws RemoteException {
+		System.out.println("sendToClient" + message);
+		o.sendToClient(name, message, client);
+	}
+
+	public void paintToClient(String name, double x, double y) throws RemoteException {
+		o.paintToClient(name, x, y);
+	}
+
+	public void setPaintLabel(String name, double value) throws RemoteException {
+		o.setPaintLabel(name, value);
+	}
+
+	public void newPtvMessage(String name, String selfName) throws RemoteException {
+		o.newPtvMessage(name, selfName);
+	}
+
+	public void removeUser(ClientInterface c) throws RemoteException {
+		o.removeUser(c);
 	}
 
 	public static void main(String[] args) throws RemoteException {

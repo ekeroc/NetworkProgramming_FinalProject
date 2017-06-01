@@ -10,13 +10,33 @@ import javafx.stage.Stage;
 
 public class TicTacTT {
 
-	private char		currentPlayer	= 'X';
-	private Cell[][]	cell			= new Cell[3][3];
-	private Label		statusMsg		= new Label("X must play");
+	private static final Cell	Cell			= null;
+	private char				currentPlayer	= 'X';
+	public Cell[][]				cell			= new Cell[3][3];
+	private Label				statusMsg		= new Label("X must play");
 	// TODO Auto-generated method stub
 
-	Stage				primaryStage	= new Stage();
-	GridPane			pane			= new GridPane();
+	Stage						primaryStage	= new Stage();
+	GridPane					pane			= new GridPane();
+	Main						main;
+	Client						c;
+	String						nameClient;
+
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
+	public void setClient(Client c) {
+		this.c = c;
+	}
+
+	public void setName(String name) {
+		this.nameClient = name;
+	}
+
+	public TicTacTT.Cell getCell() {
+		return TicTacTT.Cell;
+	}
 
 	public void Start() {
 		for (int i = 0; i < 3; i++) {
@@ -77,7 +97,10 @@ public class TicTacTT {
 		public Cell() {
 			setStyle("-fx-border-color :  red");
 			this.setPrefSize(300, 300);
-			this.setOnMouseClicked(e -> handleClick());
+			this.setOnMouseClicked(e -> {
+				handleClick();
+
+			});
 		}
 
 		private void handleClick() {
@@ -115,6 +138,7 @@ public class TicTacTT {
 				line2.startYProperty().bind(this.heightProperty().subtract(10));
 
 				getChildren().addAll(line1, line2);
+
 			} else if (player == 'O') {
 
 				Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2 - 10,
@@ -134,5 +158,4 @@ public class TicTacTT {
 		}
 
 	}
-
 }

@@ -12,7 +12,14 @@ import java.rmi.*;
 import java.rmi.server.*;
 import java.util.*;
 
+import javax.management.JMException;
 import javax.xml.transform.Templates;
+
+import javafx.beans.value.ObservableValue;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -41,7 +48,6 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 	public void connect() throws java.rmi.RemoteException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Connect to MySQLToJava");
 			String datasource = "jdbc:mysql://localhost/network?user=root&password=Qjwkel456";
 			conn = DriverManager.getConnection(datasource);
 			System.out.println("Connect to MySQL");
@@ -63,10 +69,16 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 				response = "The Username isn't exist.";
 			} else if (rs.getString("username").compareTo(name) == 0) {
 				response = rs.getString("username") + "\tSign in success.";
-				vectorClient.add(clientInterface);
 				clientInterface.setName(name);
-				
-				System.out.println(clientInterface +"===" + clientInterface.getName() );
+
+				for (ClientInterface tmp : vectorClient)
+					tmp.updateUserList(name, 0);
+
+				vectorClient.add(clientInterface);
+				for (ClientInterface tmp2 : vectorClient)
+					clientInterface.updateUserList(tmp2.getName(), 0);
+
+				System.out.println(clientInterface + "===" + clientInterface.getName());
 			}
 
 		} catch (SQLException e) {
@@ -104,7 +116,7 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 		System.out.println("HALLLLLLLLLLLLLLLLLLLLLLLLLLl");
 		for (int i = 0; i < vectorClient.size(); i++) {
 			ClientInterface tmp = vectorClient.get(i);
-			tmp.tell("Hall~" + name + ": " + message);
+			tmp.tell(name + ": " + message);
 			System.out.println(tmp.toString() + "," + tmp);
 		}
 		System.out.println("Send message to Client: " + message);
@@ -121,6 +133,9 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 	}
 
 	public void removeUser(ClientInterface c) throws java.rmi.RemoteException {
+		for (ClientInterface tmp : vectorClient)
+			tmp.updateUserList(c.getName(), 1);
+
 		vectorClient.remove(c);
 		System.out.println(c.getName() + " off line...");
 		for (ClientInterface tmp : vectorClient) {
@@ -134,7 +149,7 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 		for (ClientInterface tmp : vectorClient) {
 			if (name.equals(tmp.getName())) {
 				hasFlag = 1;
-				tmp.tell("From " + c.getName() + " message: " + message);
+				tmp.tellToClient("From " + c.getName() + " message: " + message);
 			}
 		}
 		if (hasFlag != 1) // windows event
@@ -143,5 +158,31 @@ public class RMIImpl extends UnicastRemoteObject implements RMIInterface {
 			response = c.getName() + " send to " + name + message;
 
 		return response;
+	}
+
+	public void paintToClient(String name, double x, double y) throws java.rmi.RemoteException {
+		for (ClientInterface tmp : vectorClient) {
+			if (name.equals(tmp.getName())) {
+				tmp.paintToClient(x, y);
+			}
+		}
+	}
+
+	public void setPaintLabel(String name, double value) throws java.rmi.RemoteException {
+		for (ClientInterface tmp : vectorClient) {
+			if (name.equals(tmp.getName())) {
+				System.out.println("name = " + tmp.getName());
+				tmp.setPaintLabel(value);
+			}
+		}
+	}
+
+	public void newPtvMessage(String name, String selfName) throws RemoteException {
+		for (ClientInterface tmp : vectorClient) {
+			if (name.equals(tmp.getName())) {
+				System.out.println("newPtvMessage found the name is OK!");
+				//TODO tmp.newPtvMessage(selfName);
+			}
+		}
 	}
 }
